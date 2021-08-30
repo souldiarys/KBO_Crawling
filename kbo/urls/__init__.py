@@ -18,4 +18,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('fbv/', include('kbo.urls.function_urls')),
+    path('cbv/', include('kbo.urls.class_urls')),
 ]

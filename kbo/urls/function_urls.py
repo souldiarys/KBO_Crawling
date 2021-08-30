@@ -1,8 +1,8 @@
 from django.urls import path
 
-from ..views import hitter_all, hitter_id, hitter_year_all, hitter_year_id
-from ..views import pitcher_all, pitcher_id, pitcher_year_all, pitcher_year_id
-from ..views import team_hitter_all, team_pitcher_all, team_hitter_year, team_pitcher_year
+from ..views.function_views import hitter_all, hitter_id, hitter_year_all, hitter_year_id
+from ..views.function_views import pitcher_all, pitcher_id, pitcher_year_all, pitcher_year_id
+from ..views.function_views import team_hitter_all, team_pitcher_all, team_hitter_year, team_pitcher_year
 
 urlpatterns = [
     path('hitter/', hitter_all),

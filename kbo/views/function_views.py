@@ -44,30 +44,30 @@ def pitcher_all(request):
 @api_view(['GET', 'DELETE'])
 def hitter_id(request, player_id):
     try:
-        hitter = Hitter.objects.filter(player_id=player_id).all()
+        hitters = Hitter.objects.filter(player_id=player_id).all()
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
     if request.method == 'GET': # Retrieve a hitter's all season record
-        serializer = HitterSerializer(hitter, many=True)
+        serializer = HitterSerializer(hitters, many=True)
         return Response(serializer.data)
     elif request.method == 'DELETE': # Delete a hitter's all season record
-        hitter.delete()
+        hitters.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 # /pitcher/<int:player_id>/
 @api_view(['GET', 'DELETE'])
 def pitcher_id(request, player_id):
     try:
-        pitcher = Pitcher.objects.filter(player_id=player_id).all()
+        pitchers = Pitcher.objects.filter(player_id=player_id).all()
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
     if request.method == 'GET': # Retrieve a pitcher's all season record
-        serializer = PitcherSerializer(pitcher, many=True)
+        serializer = PitcherSerializer(pitchers, many=True)
         return Response(serializer.data)
     elif request.method == 'DELETE': # Delete a pitcher's all season record
-        pitcher.delete()
+        pitchers.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 # /year/<int:year>/hitter/
