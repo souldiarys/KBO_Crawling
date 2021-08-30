@@ -25,183 +25,183 @@ from ..serializers import HitterSerializer, PitcherSerializer
 # /year/<int:year>/team/<int:team_id>/pitcher/
 
 class hitter_all(APIView):
-    def get(self, request, format=None):
+    def get(self, request, *args, **kwargs):
         hitters = Hitter.objects.all()
         serializer = HitterSerializer(hitters, many=True)
         return Response(serializer.data)
 
 class pitcher_all(APIView):
-    def get(self, request, format=None):
+    def get(self, request, *args, **kwargs):
         pitchers = Pitcher.objects.all()
         serializer = PitcherSerializer(pitchers, many=True)
         return Response(serializer.data)
 
 class hitter_id(APIView):
-    def get_object(self, player_id):
+    def get_object(self):
         try:
-            return Hitter.objects.filter(player_id=player_id).all()
+            return Hitter.objects.filter(player_id=self.kwargs['player_id']).all()
         except:
             raise Http404
 
-    def get(self, request, player_id, format=None):
-        hitters = self.get_object(player_id)
+    def get(self, request, *args, **kwargs):
+        hitters = self.get_object()
         serializer = HitterSerializer(hitters, many=True)
         return Response(serializer.data)
 
-    def delete(self, request, player_id, formant=None):
-        hitters = self.get_object(player_id)
+    def delete(self, request, *args, **kwargs):
+        hitters = self.get_object()
         hitters.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class pitcher_id(APIView):
-    def get_object(self, player_id):
+    def get_object(self):
         try:
-            return Pitcher.objects.filter(player_id=player_id).all()
+            return Pitcher.objects.filter(player_id=self.kwargs['player_id']).all()
         except:
             raise Http404
 
-    def get(self, request, player_id, format=None):
-        pitchers = self.get_object(player_id)
+    def get(self, request, *args, **kwargs):
+        pitchers = self.get_object()
         serializer = PitcherSerializer(pitchers, many=True)
         return Response(serializer.data)
 
-    def delete(self, request, player_id, formant=None):
-        pitchers = self.get_object(player_id)
+    def delete(self, request, *args, **kwargs):
+        pitchers = self.get_object()
         pitchers.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class hitter_year_all(APIView):
-    def get_object(self, year):
+    def get_object(self):
         try:
-            return Hitter.objects.filter(year=year).all()
+            return Hitter.objects.filter(year=self.kwargs['year']).all()
         except:
             raise Http404
 
-    def get(self, request, year, format=None):
-        hitters = self.get_object(year)
+    def get(self, request, *args, **kwargs):
+        hitters = self.get_object()
         serializer = HitterSerializer(hitters, many=True)
         return Response(serializer.data)
 
 class pitcher_year_all(APIView):
-    def get_object(self, year):
+    def get_object(self):
         try:
-            return Pitcher.objects.filter(year=year).all()
+            return Pitcher.objects.filter(year=self.kwargs['year']).all()
         except:
             raise Http404
 
-    def get(self, request, year, format=None):
-        pitchers = self.get_object(year)
+    def get(self, request, *args, **kwargs):
+        pitchers = self.get_object()
         serializer = PitcherSerializer(pitchers, many=True)
         return Response(serializer.data)
 
 class hitter_year_id(APIView):
-    def get_object(self, year, player_id):
+    def get_object(self):
         try:
-            return Hitter.objects.filter(Q(player_id=player_id) & Q(year=year)).get()
+            return Hitter.objects.filter(Q(player_id=self.kwargs['player_id']) & Q(year=self.kwargs['year'])).get()
         except:
             raise Http404
     
-    def get(self, request, year, player_id, format=None):
-        hitter = self.get_object(year, player_id)
+    def get(self, request, *args, **kwargs):
+        hitter = self.get_object()
         serializer = HitterSerializer(hitter)
         return Response(serializer.data)
 
-    def post(self, request, year, player_id, format=None):
+    def post(self, request, *args, **kwargs):
         serializer = HitterSerializer(request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def put(self, request, year, player_id, format=None):
-        hitter = self.get_object(year, player_id)
+    def put(self, request, *args, **kwargs):
+        hitter = self.get_object()
         serializer = HitterSerializer(hitter, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, year, player_id, format=None):
-        hitter = self.get_object(year, player_id)
+    def delete(self, request, *args, **kwargs):
+        hitter = self.get_object()
         hitter.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class pitcher_year_id(APIView):
-    def get_object(self, year, player_id):
+    def get_object(self):
         try:
-            return Pitcher.objects.filter(Q(player_id=player_id) & Q(year=year)).get()
+            return Pitcher.objects.filter(Q(player_id=self.kwargs['player_id']) & Q(year=self.kwargs['year'])).get()
         except:
             raise Http404
     
-    def get(self, request, year, player_id, format=None):
-        pitcher = self.get_object(year, player_id)
+    def get(self, request, *args, **kwargs):
+        pitcher = self.get_object()
         serializer = PitcherSerializer(pitcher)
         return Response(serializer.data)
 
-    def post(self, request, year, player_id, format=None):
+    def post(self, request, *args, **kwargs):
         serializer = PitcherSerializer(request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def put(self, request, year, player_id, format=None):
-        pitcher = self.get_object(year, player_id)
+    def put(self, request, *args, **kwargs):
+        pitcher = self.get_object()
         serializer = PitcherSerializer(pitcher, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, year, player_id, format=None):
-        pitcher = self.get_object(year, player_id)
+    def delete(self, request, *args, **kwargs):
+        pitcher = self.get_object()
         pitcher.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class team_hitter_all(APIView):
-    def get_object(self, team_id):
+    def get_object(self):
         try:
-            return Hitter.objects.filter(team_id=team_id).all()
+            return Hitter.objects.filter(team_id=self.kwargs['team_id']).all()
         except:
             raise Http404
 
-    def get(self, request, team_id, format=None):
-        hitters = self.get_object(team_id)
+    def get(self, request, *args, **kwargs):
+        hitters = self.get_object()
         serializer = HitterSerializer(hitters, many=True)
         return Response(serializer.data)
 
 class team_pitcher_all(APIView):
-    def get_object(self, team_id):
+    def get_object(self):
         try:
-            return Pitcher.objects.filter(team_id=team_id).all()
+            return Pitcher.objects.filter(team_id=self.kwargs['team_id']).all()
         except:
             raise Http404
 
-    def get(self, request, team_id, format=None):
-        pitchers = self.get_object(team_id)
+    def get(self, request, *args, **kwargs):
+        pitchers = self.get_object()
         serializer = PitcherSerializer(pitchers, many=True)
         return Response(serializer.data)
 
 class team_hitter_year(APIView):
-    def get_object(self, year, team_id):
+    def get_object(self):
         try:
-            return Hitter.objects.filter(Q(team_id=team_id) & Q(year=year)).all()
+            return Hitter.objects.filter(Q(team_id=self.kwargs['team_id']) & Q(year=self.kwargs['year'])).all()
         except:
             raise Http404
 
-    def get(self, request, year, team_id, format=None):
-        hitters = self.get_object(year, team_id)
+    def get(self, request, *args, **kwargs):
+        hitters = self.get_object()
         serializer = HitterSerializer(hitters, many=True)
         return Response(serializer.data)
 
 class team_pitcher_year(APIView):
-    def get_object(self, year, team_id):
+    def get_object(self):
         try:
-            return Pitcher.objects.filter(Q(team_id=team_id) & Q(year=year)).all()
+            return Pitcher.objects.filter(Q(team_id=self.kwargs['team_id']) & Q(year=self.kwargs['year'])).all()
         except:
             raise Http404
 
-    def get(self, request, year, team_id, format=None):
-        pitchers = self.get_object(year, team_id)
+    def get(self, request, *args, **kwargs):
+        pitchers = self.get_object()
         serializer = PitcherSerializer(pitchers, many=True)
         return Response(serializer.data)
