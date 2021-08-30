@@ -35,7 +35,7 @@ class Hitter(Base):
     player_id = Column('player_id', Integer, primary_key=True)
     year = Column('year', Integer, primary_key=True)
     name = Column('name', String)
-    team_id = Column('team_id', Integer, ForeignKey('teams.id'))
+    team_id = Column('team_id', Integer, ForeignKey('team.id'))
     avg = Column('avg', String)
     g = Column('g', Integer)
     pa = Column('pa', Integer)
@@ -55,7 +55,7 @@ class Pitcher(Base):
     player_id = Column('player_id', Integer, primary_key=True)
     year = Column('year', Integer, primary_key=True)
     name = Column('name', String)
-    team_id = Column('team_id', Integer, ForeignKey('teams.id'))
+    team_id = Column('team_id', Integer, ForeignKey('team.id'))
     era = Column('era', String)
     g = Column('g', Integer)
     w = Column('w', Integer)
@@ -92,7 +92,7 @@ def read_table(engine, session, table):
 def get_kbo_teams(url, year):
     chromeOptions = webdriver.ChromeOptions()
     chromeOptions.add_argument('--headless')
-    chromeDriver = webdriver.Chrome(executable_path=getcwd() + '/crawling/driver/chromedriver.exe', options=chromeOptions)
+    chromeDriver = webdriver.Chrome(executable_path=getcwd() + '/driver/chromedriver.exe', options=chromeOptions)
 
     teamList = []
     try:
@@ -122,7 +122,7 @@ def get_kbo_teams(url, year):
 def get_kbo_stats(url, year):
     chromeOptions = webdriver.ChromeOptions()
     chromeOptions.add_argument('--headless')
-    chromeDriver = webdriver.Chrome(executable_path=getcwd() + '/crawling/driver/chromedriver.exe', options=chromeOptions)
+    chromeDriver = webdriver.Chrome(executable_path=getcwd() + '/driver/chromedriver.exe', options=chromeOptions)
 
     try:
         chromeDriver.get(url)
@@ -290,13 +290,13 @@ engine = init_engine(dbDriver, dbHost, dbPort, dbUsername, dbPassword, dbName)
 session = init_session(engine)
 
 #create_table(engine, Team)
-create_table(engine, Hitter)
-#create_table(engine, Pitcher)
+#create_table(engine, Hitter)
+create_table(engine, Pitcher)
 
 if __name__=='__main__':
     freeze_support()
-    #pitcher_pool = Pool(12)
-    hitter_pool = Pool(12)
+    pitcher_pool = Pool(12)
+    #hitter_pool = Pool(12)
 
     # Crawling KBO All Teams
     #teamList = []
@@ -307,10 +307,10 @@ if __name__=='__main__':
     #teamSeries.drop_duplicates(keep='first', inplace=True)
     #teamSeries.to_sql(name=Team.__tablename__, con=engine, if_exists='append', index=False)
 
-    #pitcher_pool.map(get_all_pitchers, list(range(1982, 2021)))
-    #pitcher_pool.close()
-    #pitcher_pool.join()
+    pitcher_pool.map(get_all_pitchers, list(range(1982, 2021)))
+    pitcher_pool.close()
+    pitcher_pool.join()
 
-    hitter_pool.map(get_all_hitters, list(range(1982, 2021)))
-    hitter_pool.close()
-    hitter_pool.join()
+    #hitter_pool.map(get_all_hitters, list(range(1982, 2021)))
+    #hitter_pool.close()
+    #hitter_pool.join()
