@@ -4,6 +4,7 @@ from django.http.response import Http404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.exceptions import NotFound, ParseError
 
 from ..models import Hitter, Pitcher
 from ..serializers import HitterSerializer, PitcherSerializer
@@ -38,10 +39,14 @@ class pitcher_all(APIView):
 
 class hitter_id(APIView):
     def get_object(self):
-        try:
-            return Hitter.objects.filter(player_id=self.kwargs['player_id']).all()
-        except:
-            raise Http404
+        if 'player_id' in self.kwargs:
+            hitter = Hitter.objects.filter(player_id=self.kwargs['player_id']).all()
+            if len(hitter) > 0:
+                return hitter
+            else:
+                raise NotFound("Not found hitter with player_id #" + str(self.kwargs['player_id']))
+        else:
+            raise ParseError("Bad Request, Not Found \'player_id\' parameter")
 
     def get(self, request, *args, **kwargs):
         hitters = self.get_object()
@@ -55,10 +60,14 @@ class hitter_id(APIView):
 
 class pitcher_id(APIView):
     def get_object(self):
-        try:
-            return Pitcher.objects.filter(player_id=self.kwargs['player_id']).all()
-        except:
-            raise Http404
+        if 'player_id' in self.kwargs:
+            pitcher = Pitcher.objects.filter(player_id=self.kwargs['player_id']).all()
+            if len(pitcher) > 0:
+                return pitcher
+            else:
+                raise NotFound("Not found pitcher with player_id #" + str(self.kwargs['player_id']))
+        else:
+            raise ParseError("Bad Request, Not Found \'player_id\' parameter")
 
     def get(self, request, *args, **kwargs):
         pitchers = self.get_object()
@@ -72,10 +81,14 @@ class pitcher_id(APIView):
 
 class hitter_year_all(APIView):
     def get_object(self):
-        try:
-            return Hitter.objects.filter(year=self.kwargs['year']).all()
-        except:
-            raise Http404
+        if 'year' in self.kwargs:
+            hitter = Hitter.objects.filter(year=self.kwargs['year']).all()
+            if len(hitter) > 0:
+                return hitter
+            else:
+                raise NotFound("Not found hitter with year #" + str(self.kwargs['year']))
+        else:
+            raise ParseError("Bad Request, Not Found \'year\' parameter")
 
     def get(self, request, *args, **kwargs):
         hitters = self.get_object()
@@ -84,10 +97,14 @@ class hitter_year_all(APIView):
 
 class pitcher_year_all(APIView):
     def get_object(self):
-        try:
-            return Pitcher.objects.filter(year=self.kwargs['year']).all()
-        except:
-            raise Http404
+        if 'year' in self.kwargs:
+            pitcher = Pitcher.objects.filter(year=self.kwargs['year']).all()
+            if len(pitcher) > 0:
+                return pitcher
+            else:
+                raise NotFound("Not found pitcher with year #" + str(self.kwargs['year']))
+        else:
+            raise ParseError("Bad Request, Not Found \'year\' parameter")
 
     def get(self, request, *args, **kwargs):
         pitchers = self.get_object()
@@ -96,10 +113,14 @@ class pitcher_year_all(APIView):
 
 class hitter_year_id(APIView):
     def get_object(self):
-        try:
-            return Hitter.objects.filter(Q(player_id=self.kwargs['player_id']) & Q(year=self.kwargs['year'])).get()
-        except:
-            raise Http404
+        if 'player_id' in self.kwargs and 'year' in self.kwargs:
+            hitter = Hitter.objects.filter(Q(player_id=self.kwargs['player_id']) & Q(year=self.kwargs['year'])).get()
+            if len(hitter) > 0:
+                return hitter
+            else:
+                raise NotFound("Not found hitter with player_id #" + str(self.kwargs('player_id') + " and year #" + str(self.kwargs['year'])))
+        else:
+            raise ParseError("Bad Request, Not Found \'player_id\' or \'year\' parameter")
     
     def get(self, request, *args, **kwargs):
         hitter = self.get_object()
@@ -128,10 +149,14 @@ class hitter_year_id(APIView):
 
 class pitcher_year_id(APIView):
     def get_object(self):
-        try:
-            return Pitcher.objects.filter(Q(player_id=self.kwargs['player_id']) & Q(year=self.kwargs['year'])).get()
-        except:
-            raise Http404
+        if 'player_id' in self.kwargs and 'year' in self.kwargs:
+            pitcher = Pitcher.objects.filter(Q(player_id=self.kwargs['player_id']) & Q(year=self.kwargs['year'])).get()
+            if len(pitcher) > 0:
+                return pitcher
+            else:
+                raise NotFound("Not found pitcher with player_id #" + str(self.kwargs('player_id') + " and year #" + str(self.kwargs['year'])))
+        else:
+            raise ParseError("Bad Request, Not Found \'player_id\' or \'year\' parameter")
     
     def get(self, request, *args, **kwargs):
         pitcher = self.get_object()
@@ -160,10 +185,14 @@ class pitcher_year_id(APIView):
 
 class team_hitter_all(APIView):
     def get_object(self):
-        try:
-            return Hitter.objects.filter(team_id=self.kwargs['team_id']).all()
-        except:
-            raise Http404
+        if 'team_id' in self.kwargs:
+            hitter = Hitter.objects.filter(team_id=self.kwargs['team_id']).all()
+            if len(hitter) > 0:
+                return hitter
+            else:
+                raise NotFound("Not found hitter with team_id #" + str(self.kwargs['team_id']))
+        else:
+            raise ParseError("Bad Request, Not Found \'team_id\' parameter")
 
     def get(self, request, *args, **kwargs):
         hitters = self.get_object()
@@ -172,10 +201,14 @@ class team_hitter_all(APIView):
 
 class team_pitcher_all(APIView):
     def get_object(self):
-        try:
-            return Pitcher.objects.filter(team_id=self.kwargs['team_id']).all()
-        except:
-            raise Http404
+        if 'team_id' in self.kwargs:
+            pitcher = Pitcher.objects.filter(team_id=self.kwargs['team_id']).all()
+            if len(pitcher) > 0:
+                return pitcher
+            else:
+                raise NotFound("Not found pitcher with team_id #" + str(self.kwargs['team_id']))
+        else:
+            raise ParseError("Bad Request, Not Found \'team_id\' parameter")
 
     def get(self, request, *args, **kwargs):
         pitchers = self.get_object()
@@ -184,10 +217,14 @@ class team_pitcher_all(APIView):
 
 class team_hitter_year(APIView):
     def get_object(self):
-        try:
-            return Hitter.objects.filter(Q(team_id=self.kwargs['team_id']) & Q(year=self.kwargs['year'])).all()
-        except:
-            raise Http404
+        if 'team_id' in self.kwargs and 'year' in self.kwargs:
+            hitter = Hitter.objects.filter(Q(team_id=self.kwargs['team_id']) & Q(year=self.kwargs['year'])).all()
+            if len(hitter) > 0:
+                return hitter
+            else:
+                raise NotFound("Not found hitter with team_id #" + str(self.kwargs('team_id') + " and year #" + str(self.kwargs['year'])))
+        else:
+            raise ParseError("Bad Request, Not Found \'team_id\' or \'year\' parameter")
 
     def get(self, request, *args, **kwargs):
         hitters = self.get_object()
@@ -196,10 +233,14 @@ class team_hitter_year(APIView):
 
 class team_pitcher_year(APIView):
     def get_object(self):
-        try:
-            return Pitcher.objects.filter(Q(team_id=self.kwargs['team_id']) & Q(year=self.kwargs['year'])).all()
-        except:
-            raise Http404
+        if 'team_id' in self.kwargs and 'year' in self.kwargs:
+            pitcher = Pitcher.objects.filter(Q(team_id=self.kwargs['team_id']) & Q(year=self.kwargs['year'])).all()
+            if len(pitcher) > 0:
+                return pitcher
+            else:
+                raise NotFound("Not found pitcher with team_id #" + str(self.kwargs('team_id') + " and year #" + str(self.kwargs['year'])))
+        else:
+            raise ParseError("Bad Request, Not Found \'team_id\' or \'year\' parameter")
 
     def get(self, request, *args, **kwargs):
         pitchers = self.get_object()
